@@ -75,18 +75,7 @@ function(username, password, done){
     return done(null, false, {message: 'パスワードが正しくありません。'});
   });
 }
-/*
-function(req, username, password, done) {
-  process.nextTick(function(){
-    if(username === "test" && password === "test") {
-      return done(null, username)
-    } else {
-      console.log('login error')
-      return done(null, false, {message: 'パスワードが正しくありません。'})
-    }
-  }) 
-}
-*/
+
 ));
 
 passport.serializeUser(function(username, done){
