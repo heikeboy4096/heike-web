@@ -17,7 +17,7 @@ router.post('/download', function(req, res, next) {
     const url = req.body.url;
     const vid = req.body.video_format;
     const aud = req.body.audio_format; 
-    var download = 'youtube-dl -f ' + vid + '+' + aud + ' --merge-output-format mp4 ' + url;
+    var download = 'youtube-dl -f ' + vid + ' --output="video.mp4" ' + url;
     exec(download, function(err, stdout, stderr){
         if(err){
             var data = {
@@ -29,9 +29,9 @@ router.post('/download', function(req, res, next) {
             return
         }
     })
-    .then(vd => {
-        res.redirect('/vdl');
-    })
+
+    res.render('vdl', {errmsg: null, output: null});
+
 });
 
 

@@ -12,8 +12,9 @@ var connection = mysql.createConnection({
 /* GET home page. */
 router.get('/', function(req, res, next) {
     const session = req.session.passport;
-    if(session == null){
+    if(session == undefined){
       res.redirect('/login');
+      return
     } 
     res.render('index');
 });

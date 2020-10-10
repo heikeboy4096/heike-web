@@ -5,6 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mysql = require('mysql2');
 var bcrypt = require('bcrypt');
+var passport = require('passport');
+var config = require('./config');
+var session = require('express-session');
 
 var connection = mysql.createConnection({
   host: '127.0.0.1',
@@ -15,6 +18,7 @@ var connection = mysql.createConnection({
 //追加オブジェクト
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var TwitterStrategy = require('passport-twitter').Strategy;
 var session = require('express-session');
 
 //vdl用
@@ -41,10 +45,32 @@ var session_data = {
   secret: 'password test',
   resave: false,
   saveUninitialized: false,
-  cookie: {maxAge: 30*60*1000}
+  cookie: {maxAge: 5*1000}
 };
 
 app.use(session(session_data));
+
+//twitter認証
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new TwitterStrategy({
+  consumerKey: config.consumerKey,
+  consumerSecret: config.consumerSecret,
+  callbackURL: config.callbackURL
+},
+  function(token, tokenSecret, profile, done){
+    //ここにユーザー追加のクエリを書く
+    console.log(profile);
+    return done(null, profile);
+  }
+));
+
+passport.serializeUser(function(username, done){
+  done(null, username);
+});
+passport.deserializeUser(function(username, done){
+  done(null, username);
+});
 
 //認証機構
 app.use(passport.initialize());
@@ -89,6 +115,9 @@ passport.deserializeUser(function(username, done){
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/vdl', vdlRouter);
+app.get('/auth/twitter', passport.authenticate('twitter'));
+app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' 
+}));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
