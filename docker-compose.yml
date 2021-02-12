@@ -1,0 +1,40 @@
+version: '3'
+services:
+  app:
+    image: node:10.14.2
+    container_name: node
+    build: .
+    tty: true
+    ports:
+     - "3000:3000"
+    volumes:
+      - ./src:/var/app
+    working_dir: /var/app
+    stdin_open: true
+    command: > 
+      bash -c "npm install &&
+      npm install --save bcryptjs && 
+      npm uninstall --save bcrypt &&
+      npm start"
+    depends_on:
+      - db
+    links:
+      - db:db
+
+  db:
+    image: mysql:5.7
+    container_name: mysql-host
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: "Asia/Tokyo"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="content-type" content="text/html ;charset=UTF-8">
+        <title>ビデオダウンローダー | へけぼweb</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="/stylesheets/style.css">
+        <style>
+            header {
+                background: darkmagenta;
+                color: white;
+                font-family: fantasy;
+            }
+            html, body {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+            body {
+                background: #e0e6eb;
+            }
+            .fixed {
+                width:400px;
+                margin-left:auto;
+                margin-right: auto;
+            }
+            .error{
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="row">
+            <div class="col-lg-6 pb-5">
+                <header class="fixed text-center rounded-lg"><h2 class="py-3">ビデオダウンローダー</h2></header>
+                <div class="fixed card shadow-lg">
+                    <form method="post" action="/vdl/download">
+                        <div class="form-group m-4">
+                            <label for="url">動画URL</label>
+                            <input type="text" name="url" id="url" class="form-control">
+                        </div>
+                        <div class="form-group m-4">
+                            <label for="video_format">動画形式</label>
+                            <input type="text" name="video_format" id="video_format" class="form-control">
+                        </div>
+                        <div class="form-group m-4">
+                            <label for="audio_format">音声形式</label>
+                            <input type="text" name="audio_format" id="audio_format" class="form-control">
+                        </div>
+                        <div class="pb-4 text-center">
+                            <input class="btn btn-danger"type="submit" value="ダウンロードする">
+                        </div>
+                        <p class="error text-center"><%= errmsg %></p>
+                        <a href="../reol.mp4" download="vid.mp4">ダウンロード</a>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-6 card">
+                <h2 class="pt-1 text-center">動画リスト</h2>
+                <p><%= output %></p>
+            </div>
+        </div>
+    </body>
+</html>
