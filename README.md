@@ -1,5 +1,3 @@
-#auth-web
+# Auth-web
 
-make .env files
-
-docker-compose up -d
+認証機構の例
